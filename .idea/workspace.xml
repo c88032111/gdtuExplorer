@@ -12,7 +12,10 @@
   <component name="ChangeListManager">
     <list default="true" id="bdf90e38-d2c1-4123-9c54-4b71a9ed2da2" name="Default Changelist" comment="ini project">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/layout/default_layout.jade" beforeDir="false" afterPath="$PROJECT_DIR$/views/layout/default_layout.jade" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/address.jade" beforeDir="false" afterPath="$PROJECT_DIR$/views/address.jade" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/block.jade" beforeDir="false" afterPath="$PROJECT_DIR$/views/block.jade" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/index.jade" beforeDir="false" afterPath="$PROJECT_DIR$/views/index.jade" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/watch.jade" beforeDir="false" afterPath="$PROJECT_DIR$/views/watch.jade" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,15 +64,15 @@
     <option name="LAST_COMMIT_MESSAGE" value="ini project" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="496" y="285" key="Vcs.Push.Dialog.v2" timestamp="1620234763837">
+    <state x="496" y="285" key="Vcs.Push.Dialog.v2" timestamp="1620236189519">
       <screen x="0" y="23" width="1792" height="1044" />
     </state>
-    <state x="496" y="285" key="Vcs.Push.Dialog.v2/0.23.1792.1044@0.23.1792.1044" timestamp="1620234763837" />
+    <state x="496" y="285" key="Vcs.Push.Dialog.v2/0.23.1792.1044@0.23.1792.1044" timestamp="1620236189519" />
     <state x="496" y="285" key="Vcs.Push.Dialog.v2/0.23.1792.1045@0.23.1792.1045" timestamp="1620163696406" />
-    <state x="594" y="300" width="673" height="580" key="find.popup" timestamp="1620234963678">
+    <state x="594" y="300" width="673" height="580" key="find.popup" timestamp="1620240872417">
       <screen x="0" y="23" width="1792" height="1044" />
     </state>
-    <state x="594" y="300" width="673" height="580" key="find.popup/0.23.1792.1044@0.23.1792.1044" timestamp="1620234963678" />
+    <state x="594" y="300" width="673" height="580" key="find.popup/0.23.1792.1044@0.23.1792.1044" timestamp="1620240872417" />
     <state x="594" y="300" width="673" height="580" key="find.popup/0.23.1792.1045@0.23.1792.1045" timestamp="1620163657106" />
   </component>
 </project>
