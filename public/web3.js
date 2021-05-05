@@ -1068,7 +1068,7 @@ require=(function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=
     var formatOutputBytes = function (param, name) {
       var matches = name.match(/^bytes([0-9]*)/);
       var size = parseInt(matches[1]);
-      return '0x' + param.staticPart().slice(0, 2 * size);
+      return 'gd' + param.staticPart().slice(0, 2 * size);
     };
 
     /**
@@ -1080,7 +1080,7 @@ require=(function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=
      */
     var formatOutputDynamicBytes = function (param) {
       var length = (new BigNumber(param.dynamicPart().slice(0, 64), 16)).toNumber() * 2;
-      return '0x' + param.dynamicPart().substr(64, length);
+      return 'gd' + param.dynamicPart().substr(64, length);
     };
 
     /**
@@ -1104,7 +1104,7 @@ require=(function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=
      */
     var formatOutputAddress = function (param) {
       var value = param.staticPart();
-      return "0x" + value.slice(value.length - 40, value.length);
+      return "gd" + value.slice(value.length - 40, value.length);
     };
 
     module.exports = {
@@ -1575,8 +1575,8 @@ require=(function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=
       if (this.isDynamicArray(name)) {
 
         return (function () {
-          var arrayOffset = parseInt('0x' + bytes.substr(offset * 2, 64)); // in bytes
-          var length = parseInt('0x' + bytes.substr(arrayOffset * 2, 64)); // in int
+          var arrayOffset = parseInt('gd' + bytes.substr(offset * 2, 64)); // in bytes
+          var length = parseInt('gd' + bytes.substr(arrayOffset * 2, 64)); // in int
           var arrayStart = arrayOffset + 32; // array starts after length; // in bytes
 
           var nestedName = self.nestedName(name);
@@ -1611,8 +1611,8 @@ require=(function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=
       } else if (this.isDynamicType(name)) {
 
         return (function () {
-          var dynamicOffset = parseInt('0x' + bytes.substr(offset * 2, 64));      // in bytes
-          var length = parseInt('0x' + bytes.substr(dynamicOffset * 2, 64));      // in bytes
+          var dynamicOffset = parseInt('gd' + bytes.substr(offset * 2, 64));      // in bytes
+          var length = parseInt('gd' + bytes.substr(dynamicOffset * 2, 64));      // in bytes
           var roundedLength = Math.floor((length + 31) / 32);                     // in int
           var param = new SolidityParam(bytes.substr(dynamicOffset * 2, ( 1 + roundedLength) * 64), 0);
           return self._outputFormatter(param, name);
@@ -1814,7 +1814,7 @@ require=(function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=
 
     module.exports = function (value, options) {
       if (options && options.encoding === 'hex') {
-        if (value.length > 2 && value.substr(0, 2) === '0x') {
+        if (value.length > 2 && value.substr(0, 2) === 'gd') {
           value = value.substr(2);
         }
         value = CryptoJS.enc.Hex.parse(value);
@@ -1934,7 +1934,7 @@ require=(function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=
 // Find termination
       var str = "";
       var i = 0, l = hex.length;
-      if (hex.substring(0, 2) === '0x') {
+      if (hex.substring(0, 2) === 'gd') {
         i = 2;
       }
       for (; i < l; i+=2) {
@@ -1958,7 +1958,7 @@ require=(function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=
 // Find termination
       var str = "";
       var i = 0, l = hex.length;
-      if (hex.substring(0, 2) === '0x') {
+      if (hex.substring(0, 2) === 'gd') {
         i = 2;
       }
       for (; i < l; i+=2) {
@@ -1970,7 +1970,7 @@ require=(function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=
     };
 
     /**
-     * Should be called to get hex representation (prefixed by 0x) of utf8 string
+     * Should be called to get hex representation (prefixed by gd) of utf8 string
      *
      * @method fromUtf8
      * @param {String} string
@@ -1994,11 +1994,11 @@ require=(function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=
         }
       }
 
-      return "0x" + hex;
+      return "gd" + hex;
     };
 
     /**
-     * Should be called to get hex representation (prefixed by 0x) of ascii string
+     * Should be called to get hex representation (prefixed by gd) of ascii string
      *
      * @method fromAscii
      * @param {String} string
@@ -2013,7 +2013,7 @@ require=(function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=
         hex += n.length < 2 ? '0' + n : n;
       }
 
-      return "0x" + hex;
+      return "gd" + hex;
     };
 
     /**
@@ -2080,7 +2080,7 @@ require=(function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=
       var number = toBigNumber(value);
       var result = number.toString(16);
 
-      return number.lessThan(0) ? '-0x' + result.substr(1) : '0x' + result;
+      return number.lessThan(0) ? '-gd' + result.substr(1) : 'gd' + result;
     };
 
     /**
@@ -2106,9 +2106,9 @@ require=(function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=
 
       // if its a negative number, pass it through fromDecimal
       if (isString(val)) {
-        if (val.indexOf('-0x') === 0)
+        if (val.indexOf('-gd') === 0)
           return fromDecimal(val);
-        else if(val.indexOf('0x') === 0)
+        else if(val.indexOf('gd') === 0)
           return val;
         else if (!isFinite(val))
           return fromUtf8(val,1);
@@ -2201,8 +2201,8 @@ require=(function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=
       if (isBigNumber(number))
         return number;
 
-      if (isString(number) && (number.indexOf('0x') === 0 || number.indexOf('-0x') === 0)) {
-        return new BigNumber(number.replace('0x',''), 16);
+      if (isString(number) && (number.indexOf('gd') === 0 || number.indexOf('-gd') === 0)) {
+        return new BigNumber(number.replace('gd',''), 16);
       }
 
       return new BigNumber(number.toString(10), 10);
@@ -2231,7 +2231,7 @@ require=(function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=
      * @return {Boolean}
      */
     var isStrictAddress = function (address) {
-      return /^0x[0-9a-f]{40}$/i.test(address);
+      return /^gd[0-9a-f]{40}$/i.test(address);
     };
 
     /**
@@ -2242,10 +2242,10 @@ require=(function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=
      * @return {Boolean}
      */
     var isAddress = function (address) {
-      if (!/^(0x)?[0-9a-f]{40}$/i.test(address)) {
+      if (!/^(gd)?[0-9a-f]{40}$/i.test(address)) {
         // check if it has the basic requirements of an address
         return false;
-      } else if (/^(0x)?[0-9a-f]{40}$/.test(address) || /^(0x)?[0-9A-F]{40}$/.test(address)) {
+      } else if (/^(gd)?[0-9a-f]{40}$/.test(address) || /^(gd)?[0-9A-F]{40}$/.test(address)) {
         // If it's all small caps or all all caps, return true
         return true;
       } else {
@@ -2263,7 +2263,7 @@ require=(function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=
      */
     var isChecksumAddress = function (address) {
       // Check each case
-      address = address.replace('0x','');
+      address = address.replace('gd','');
       var addressHash = sha3(address.toLowerCase());
 
       for (var i = 0; i < 40; i++ ) {
@@ -2287,9 +2287,9 @@ require=(function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=
     var toChecksumAddress = function (address) {
       if (typeof address === 'undefined') return '';
 
-      address = address.toLowerCase().replace('0x','');
+      address = address.toLowerCase().replace('gd','');
       var addressHash = sha3(address);
-      var checksumAddress = '0x';
+      var checksumAddress = 'gd';
 
       for (var i = 0; i < address.length; i++ ) {
         // If ith character is 9 to f then make it uppercase
@@ -2303,7 +2303,7 @@ require=(function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=
     };
 
     /**
-     * Transforms given string to valid 20 bytes-length addres with 0x prefix
+     * Transforms given string to valid 20 bytes-length addres with gd prefix
      *
      * @method toAddress
      * @param {String} address
@@ -2315,10 +2315,10 @@ require=(function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=
       }
 
       if (/^[0-9a-f]{40}$/.test(address)) {
-        return '0x' + address;
+        return 'gd' + address;
       }
 
-      return '0x' + padLeft(toHex(address).substr(2), 40);
+      return 'gd' + padLeft(toHex(address).substr(2), 40);
     };
 
     /**
@@ -2412,9 +2412,9 @@ require=(function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=
      * @return {Boolean}
      */
     var isBloom = function (bloom) {
-      if (!/^(0x)?[0-9a-f]{512}$/i.test(bloom)) {
+      if (!/^(gd)?[0-9a-f]{512}$/i.test(bloom)) {
         return false;
-      } else if (/^(0x)?[0-9a-f]{512}$/.test(bloom) || /^(0x)?[0-9A-F]{512}$/.test(bloom)) {
+      } else if (/^(gd)?[0-9a-f]{512}$/.test(bloom) || /^(gd)?[0-9A-F]{512}$/.test(bloom)) {
         return true;
       }
       return false;
@@ -2428,9 +2428,9 @@ require=(function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=
      * @return {Boolean}
      */
     var isTopic = function (topic) {
-      if (!/^(0x)?[0-9a-f]{64}$/i.test(topic)) {
+      if (!/^(gd)?[0-9a-f]{64}$/i.test(topic)) {
         return false;
-      } else if (/^(0x)?[0-9a-f]{64}$/.test(topic) || /^(0x)?[0-9A-F]{64}$/.test(topic)) {
+      } else if (/^(gd)?[0-9a-f]{64}$/.test(topic) || /^(gd)?[0-9A-F]{64}$/.test(topic)) {
         return true;
       }
       return false;
@@ -2582,7 +2582,7 @@ require=(function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=
 
 
     Web3.prototype.sha3 = function(string, options) {
-      return '0x' + sha3(string, options);
+      return 'gd' + sha3(string, options);
     };
 
     /**
@@ -3251,7 +3251,7 @@ require=(function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=
 
       result.address = this._address;
       if (!this._anonymous) {
-        result.topics.push('0x' + this.signature());
+        result.topics.push('gd' + this.signature());
       }
 
       var indexedTopics = this._params.filter(function (i) {
@@ -3264,10 +3264,10 @@ require=(function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=
 
         if (utils.isArray(value)) {
           return value.map(function (v) {
-            return '0x' + coder.encodeParam(i.type, v);
+            return 'gd' + coder.encodeParam(i.type, v);
           });
         }
-        return '0x' + coder.encodeParam(i.type, value);
+        return 'gd' + coder.encodeParam(i.type, value);
       });
 
       result.topics = result.topics.concat(indexedTopics);
@@ -3446,7 +3446,7 @@ require=(function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=
 
       value = String(value);
 
-      if(value.indexOf('0x') === 0)
+      if(value.indexOf('gd') === 0)
         return value;
       else
         return utils.fromUtf8(value);
@@ -3878,7 +3878,7 @@ require=(function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=
       // format the following options
       post.topics = post.topics.map(function(topic){
         // convert only if not hex
-        return (topic.indexOf('0x') === 0) ? topic : utils.fromUtf8(topic);
+        return (topic.indexOf('gd') === 0) ? topic : utils.fromUtf8(topic);
       });
 
       return post;
@@ -3918,11 +3918,11 @@ require=(function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=
     var inputAddressFormatter = function (address) {
       var iban = new Iban(address);
       if (iban.isValid() && iban.isDirect()) {
-        return '0x' + iban.address();
+        return 'gd' + iban.address();
       } else if (utils.isStrictAddress(address)) {
         return address;
       } else if (utils.isAddress(address)) {
-        return '0x' + address;
+        return 'gd' + address;
       }
       throw new Error('invalid address');
     };
@@ -4053,7 +4053,7 @@ require=(function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=
       }
       this.validateArgs(args);
       options.to = this._address;
-      options.data = '0x' + this.signature() + coder.encodeParams(this._inputTypes, args);
+      options.data = 'gd' + this.signature() + coder.encodeParams(this._inputTypes, args);
       return options;
     };
 
@@ -5210,23 +5210,23 @@ require=(function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=
     var transfer = require('../transfer');
 
     var blockCall = function (args) {
-      return (utils.isString(args[0]) && args[0].indexOf('0x') === 0) ? "gdtu_getBlockByHash" : "gdtu_getBlockByNumber";
+      return (utils.isString(args[0]) && args[0].indexOf('gd') === 0) ? "gdtu_getBlockByHash" : "gdtu_getBlockByNumber";
     };
 
     var transactionFromBlockCall = function (args) {
-      return (utils.isString(args[0]) && args[0].indexOf('0x') === 0) ? 'gdtu_getTransactionByBlockHashAndIndex' : 'gdtu_getTransactionByBlockNumberAndIndex';
+      return (utils.isString(args[0]) && args[0].indexOf('gd') === 0) ? 'gdtu_getTransactionByBlockHashAndIndex' : 'gdtu_getTransactionByBlockNumberAndIndex';
     };
 
     var uncleCall = function (args) {
-      return (utils.isString(args[0]) && args[0].indexOf('0x') === 0) ? 'gdtu_getUncleByBlockHashAndIndex' : 'gdtu_getUncleByBlockNumberAndIndex';
+      return (utils.isString(args[0]) && args[0].indexOf('gd') === 0) ? 'gdtu_getUncleByBlockHashAndIndex' : 'gdtu_getUncleByBlockNumberAndIndex';
     };
 
     var getBlockTransactionCountCall = function (args) {
-      return (utils.isString(args[0]) && args[0].indexOf('0x') === 0) ? 'gdtu_getBlockTransactionCountByHash' : 'gdtu_getBlockTransactionCountByNumber';
+      return (utils.isString(args[0]) && args[0].indexOf('gd') === 0) ? 'gdtu_getBlockTransactionCountByHash' : 'gdtu_getBlockTransactionCountByNumber';
     };
 
     var uncleCountCall = function (args) {
-      return (utils.isString(args[0]) && args[0].indexOf('0x') === 0) ? 'gdtu_getUncleCountByBlockHash' : 'gdtu_getUncleCountByBlockNumber';
+      return (utils.isString(args[0]) && args[0].indexOf('gd') === 0) ? 'gdtu_getUncleCountByBlockHash' : 'gdtu_getUncleCountByBlockNumber';
     };
 
     function Gdtu(web3) {
@@ -6125,8 +6125,8 @@ require=(function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=
     var globalRegistrarAbi = require('../contracts/GlobalRegistrar.json');
     var icapRegistrarAbi= require('../contracts/ICAPRegistrar.json');
 
-    var globalNameregAddress = '0xc6d9d2cd449a754c494264e1809c50e34d64562b';
-    var icapNameregAddress = '0xa1a111bc074c9cfa781f0c38e63bd51c91b8af00';
+    var globalNameregAddress = 'gdc6d9d2cd449a754c494264e1809c50e34d64562b';
+    var icapNameregAddress = 'gda1a111bc074c9cfa781f0c38e63bd51c91b8af00';
 
     module.exports = {
       global: {

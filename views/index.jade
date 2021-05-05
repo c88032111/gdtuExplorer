@@ -52,7 +52,7 @@ block contents
                 a(v-bind:href="'/tx/' + block.hash.toString(10)") {{ block.hash }}
             div
                 span(style="padding-right:5px;color:#777;") Mine by
-                a(v-bind:href="'/address/' + block.miner.replace('0x','gd').toString(10)") {{ block.miner.replace('0x','gd') }}
+                a(v-bind:href="'/address/' + block.miner.replace('gd','gd').toString(10)") {{ block.miner.replace('gd','gd') }}
           td {{ block.gasUsed }} / {{ block.gasLimit }}
           td {{ block.difficulty }}
           td {{ new Date(block.timestamp * 1000).toGMTString() }}
@@ -89,8 +89,8 @@ block contents
           td
             a.d-inline-block.text-truncate(v-bind:href="'/address/' + tx.from", style="max-width:150px") {{ tx.from }}
           td 
-            span(v-if="tx.to === '0x0'") {{ tx.to }}
-            a.d-inline-block.text-truncate(v-if="tx.to !== '0x0'", v-bind:href="'/address/' + tx.to", style="max-width:150px") {{ tx.to }}
+            span(v-if="tx.to === 'gd0'") {{ tx.to }}
+            a.d-inline-block.text-truncate(v-if="tx.to !== 'gd0'", v-bind:href="'/address/' + tx.to", style="max-width:150px") {{ tx.to }}
           td {{ tx.gas.toString(10) }}
           td {{ web3.fromWei(tx.gasPrice, 'gdtuer').toString(10) + ' GDTU' }}
           td {{ web3.fromWei((tx.gas * tx.gasPrice), 'gdtuer').toString(10) + ' GDTU' }}

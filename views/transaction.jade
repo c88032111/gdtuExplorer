@@ -49,8 +49,8 @@ block contents
       tr
         th To 
         td 
-          span(v-if="tx.to === '0x0'") {{ tx.to }}
-          a(v-if="tx.to !== '0x0'", v-bind:href="'/address/' + tx.to") {{ tx.to }}
+          span(v-if="tx.to === 'gd0'") {{ tx.to }}
+          a(v-if="tx.to !== 'gd0'", v-bind:href="'/address/' + tx.to") {{ tx.to }}
       tr
         th Value
         td {{ tx.value }} {{ tx.value_gdtu }}
@@ -172,7 +172,7 @@ block contents
 
         var tx = await getTransaction(hash);
 
-        self.isContractCreation = (tx.input.indexOf('0x6060604052') === 0);
+        self.isContractCreation = (tx.input.indexOf('gd6060604052') === 0);
 
         //-  console.log(tx);
         tx.transactionPrice = web3.fromWei(tx.gas * tx.gasPrice, 'gdtuer').toString(10) + ' GDTU';
