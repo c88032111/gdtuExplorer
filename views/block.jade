@@ -15,7 +15,7 @@ block contents
         td {{ block.number }}
       tr
         td TimeStamp
-        td {{ new Date(block.timestamp * 1000).toGMTString() }}
+        td {{ new Date(block.timestamp * 1000).Format("yyyy/MM/dd hh:mm:ss") }}
       tr
         td Transactions
         td {{ block.transactions.length }} transactions

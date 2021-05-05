@@ -55,7 +55,7 @@ block contents
                 a(v-bind:href="'/address/' + block.miner.replace('gd','gd').toString(10)") {{ block.miner.replace('gd','gd') }}
           td {{ block.gasUsed }} / {{ block.gasLimit }}
           td {{ block.difficulty }}
-          td {{ new Date(block.timestamp * 1000).toGMTString() }}
+          td {{ new Date(block.timestamp * 1000).Format("yyyy/MM/dd hh:mm:ss") }}
 
     //- ========================
     //- Recent Transactions
