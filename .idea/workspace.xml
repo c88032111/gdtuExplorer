@@ -12,8 +12,7 @@
   <component name="ChangeListManager">
     <list default="true" id="bdf90e38-d2c1-4123-9c54-4b71a9ed2da2" name="Default Changelist" comment="ini project">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/layout/default_layout.jade" beforeDir="false" afterPath="$PROJECT_DIR$/views/layout/default_layout.jade" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/web3.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/web3.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,11 +62,11 @@
     <option name="LAST_COMMIT_MESSAGE" value="ini project" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="496" y="285" key="Vcs.Push.Dialog.v2" timestamp="1620253317632">
+    <state x="496" y="285" key="Vcs.Push.Dialog.v2" timestamp="1620253518798">
       <screen x="0" y="23" width="1792" height="1045" />
     </state>
     <state x="496" y="285" key="Vcs.Push.Dialog.v2/0.23.1792.1044@0.23.1792.1044" timestamp="1620248580498" />
-    <state x="496" y="285" key="Vcs.Push.Dialog.v2/0.23.1792.1045@0.23.1792.1045" timestamp="1620253317632" />
+    <state x="496" y="285" key="Vcs.Push.Dialog.v2/0.23.1792.1045@0.23.1792.1045" timestamp="1620253518798" />
     <state x="594" y="300" width="673" height="580" key="find.popup" timestamp="1620253418077">
       <screen x="0" y="23" width="1792" height="1045" />
     </state>
