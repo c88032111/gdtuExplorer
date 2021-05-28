@@ -11,17 +11,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bdf90e38-d2c1-4123-9c54-4b71a9ed2da2" name="Default Changelist" comment="ini project">
-      <change afterPath="$PROJECT_DIR$/views/accountsList.jade" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/blockList.jade" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/transactionsList.jade" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/all.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/all.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/stylesheets/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/stylesheets/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/address.jade" beforeDir="false" afterPath="$PROJECT_DIR$/views/address.jade" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/block.jade" beforeDir="false" afterPath="$PROJECT_DIR$/views/block.jade" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/index.jade" beforeDir="false" afterPath="$PROJECT_DIR$/views/index.jade" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/layout/default_layout.jade" beforeDir="false" afterPath="$PROJECT_DIR$/views/layout/default_layout.jade" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,17 +64,18 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="ini project" />
     <MESSAGE value="fixed bug" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed bug" />
+    <MESSAGE value="ini project" />
+    <option name="LAST_COMMIT_MESSAGE" value="ini project" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="496" y="285" key="Vcs.Push.Dialog.v2" timestamp="1620315602515">
-      <screen x="0" y="23" width="1792" height="1046" />
+    <state x="496" y="285" key="Vcs.Push.Dialog.v2" timestamp="1622223705675">
+      <screen x="0" y="23" width="1792" height="1047" />
     </state>
     <state x="496" y="285" key="Vcs.Push.Dialog.v2/0.23.1792.1044@0.23.1792.1044" timestamp="1620248580498" />
     <state x="496" y="285" key="Vcs.Push.Dialog.v2/0.23.1792.1045@0.23.1792.1045" timestamp="1620253518798" />
     <state x="496" y="285" key="Vcs.Push.Dialog.v2/0.23.1792.1046@0.23.1792.1046" timestamp="1620315602515" />
+    <state x="496" y="285" key="Vcs.Push.Dialog.v2/0.23.1792.1047@0.23.1792.1047" timestamp="1622223705675" />
     <state x="594" y="300" width="673" height="582" key="find.popup" timestamp="1622065760079">
       <screen x="0" y="23" width="1792" height="1047" />
     </state>

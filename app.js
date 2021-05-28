@@ -7,8 +7,8 @@ var bodyParser = require('body-parser');
 var app = express();
 
 // set env vars down to jade
-// process.env.GDTU_RPC_URL = process.env.GDTU_RPC_URL || "http://18.207.130.23:8545"
-process.env.GDTU_RPC_URL = process.env.GDTU_RPC_URL || "//127.0.0.1:2020"
+process.env.GDTU_RPC_URL = process.env.GDTU_RPC_URL || "http://18.207.130.23:2020"
+// process.env.GDTU_RPC_URL = process.env.GDTU_RPC_URL || "//127.0.0.1:2020"
 app.locals.env = process.env;
 
 // view engine setup
