@@ -7,7 +7,8 @@ var bodyParser = require('body-parser');
 var app = express();
 
 // set env vars down to jade
-process.env.GDTU_RPC_URL = process.env.GDTU_RPC_URL || "http://18.207.130.23:8545"
+// process.env.GDTU_RPC_URL = process.env.GDTU_RPC_URL || "http://18.207.130.23:8545"
+process.env.GDTU_RPC_URL = process.env.GDTU_RPC_URL || "//127.0.0.1:2020"
 app.locals.env = process.env;
 
 // view engine setup
@@ -42,11 +43,37 @@ app.get('/tx/:hash/', function (req, res, next) {
   });
 });
 
-app.get('/address/:address/', function (req, res, next) {
+app.get('/address/:address/:current_page/', function (req, res, next) {
   var address = req.params['address'];
+  var current_page = req.params['current_page'];
   res.render('address', {
     title: 'Address',
-    address: address
+    address: address,
+    current_page: current_page
+  });
+});
+
+app.get('/blockList/:current_page/', function (req, res, next) {
+  var current_page = req.params['current_page'];
+  res.render('blockList', {
+    title: 'blockList',
+    current_page: current_page
+  });
+});
+
+app.get('/transactionsList/:current_page/', function (req, res, next) {
+  var current_page = req.params['current_page'];
+  res.render('transactionsList', {
+    title: 'transactionsList',
+    current_page: current_page
+  });
+});
+
+app.get('/accountsList/:current_page/', function (req, res, next) {
+  var current_page = req.params['current_page'];
+  res.render('accountsList', {
+    title: 'accountsList',
+    current_page: current_page
   });
 });
 

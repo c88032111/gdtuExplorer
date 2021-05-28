@@ -136,7 +136,7 @@ block contents
 
     async function getBlockInfo(number) {
 
-      var latestBlockNumber = await getBlockNumber();
+      // var latestBlockNumber = await getBlockNumber();
 
       var block = await getBlock(number); //or "latest"
       block.difficulty = block.difficulty.toString(10);

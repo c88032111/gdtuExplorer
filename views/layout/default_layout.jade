@@ -30,6 +30,12 @@ html(lang="en")
             a.nav-link(href="/") Home
               span.sr-only (current)
           li.nav-item
+            a.nav-link(href="/blockList/1") Block
+          li.nav-item
+            a.nav-link(href="/transactionsList/1") Transactions
+          li.nav-item
+            a.nav-link(href="/accountsList/1") Accounts
+          li.nav-item
             a.nav-link(href="/watch") Watch
 
         form.form-inline.my-2.my-lg-0#searchForm
@@ -65,7 +71,7 @@ html(lang="en")
         if( search.length === 66 ) { //tx hash
           location.href = '/tx/' + search;
         } else if( search.length === 42 && web3.isAddress(search) ) {
-          location.href = '/address/' + search;
+          location.href = '/address/' + search + '/1/';
         } else if( search <= blockNumber ) {
           location.href = '/block/' + search;
         } else {

@@ -8,18 +8,20 @@ block contents
     table.table._table-striped.table-bordered._table-dark.w-100
       thead.thead-light
         tr
-          th(width="14%") Current Block
-          th(width="14%") API Version
+          th(width="12%") Current Block
+          th(width="10%") API Version
           th(width="*") Client/Node Version
-          th(width="30%") Current Gas Price
-          th(width="14%") Hashrate
+          th(width="24%") Recent 10 blocks Average time
+          th(width="14%") Current Gas Price
+          //th(width="14%") Hashrate
       tr
         td
           a(v-bind:href="'/block/' + blockNumber") {{ blockNumber }}
         td {{ api }}
         td {{ node }}
+        td {{ average }} s
         td {{ gasPrice }}
-        td {{ hashrate }}
+        //td {{ hashrate }}
 
     //- h4 Latest Block: 
       a(v-bind:href="'/block/' + blockNumber") {{ blockNumber }}
@@ -27,8 +29,7 @@ block contents
     //- ========================
     //- Recent Blocks
     //- ========================
-    h1 
-      i.fa.fa-cubes
+    h1
       span.ml-1 Recent Blocks
 
     table.table.table-striped._table-bordered._table-dark.w-100
@@ -40,28 +41,27 @@ block contents
           th Difficulty
           th Timestamp
       tbody
-        tr(v-if="blocks.length === 0")
-          td(colspan="6") 
-             div(style="text-align:center")
-              i.fas.fa-2x.fa-spinner.fa-pulse 
-        tr(v-for="block in blocks", v-if="blocks.length > 0")
-          td       
-            a(v-bind:href="'/block/' + block.number.toString(10)") {{ block.number.toString(10) }}
-          td
-            div
-                a(v-bind:href="'/block/' + block.hash.toString(10)") {{ block.hash }}
-            div
-                span(style="padding-right:5px;color:#777;") Mine by
-                a(v-bind:href="'/address/' + block.miner.replace('gd','gd').toString(10)") {{ block.miner.replace('gd','gd') }}
-          td {{ block.gasUsed }} / {{ block.gasLimit }}
-          td {{ block.difficulty }}
-          td {{ new Date(block.timestamp * 1000).Format("yyyy/MM/dd hh:mm:ss") }}
+      tr(v-if="blocks.length === 0")
+        td(colspan="6")
+          div(style="text-align:center") loading...
+      tr(v-for="block in blocks", v-if="blocks.length > 0")
+        td
+          a(v-bind:href="'/block/' + Number(block.number.replace('gd','0x')).toString(10)") {{ Number(block.number.replace('gd','0x')).toString(10) }}
+        td
+          div
+            a(v-bind:href="'/block/' + block.hash.toString(10)") {{ block.hash }}
+          div
+            span(style="padding-right:5px;color:#777;") Mine by
+            a(v-bind:href="'/address/' + block.miner.toString(10)+ '/1/'") {{ block.miner }}
+            //span {{ Number(block.value.replace('gd','0x')).toString(10) }}
+        td {{ Number(block.gasUsed.replace('gd','0x')).toString(10) }} / {{ Number(block.gasLimit.replace('gd','0x')).toString(10) }}
+        td {{ Number(block.difficulty.replace('gd','0x')).toString(10) }}
+        td {{ new Date(block.timestamp * 1000).Format("yyyy/MM/dd hh:mm:ss") }}
 
     //- ========================
     //- Recent Transactions
     //- ========================
-    h1 
-      i.fas.fa-exchange-alt
+    h1
       span.ml-1 Recent Transactions
 
     table.table.table-striped._table-bordered._table-dark.w-100
@@ -70,28 +70,27 @@ block contents
           th TxHash
           th Block
           th Value
-          th From 
+          th From
           th To
           th Gas Used
           th Gas Price
           th Tx Fee
       tbody
         tr(v-if="txs.length === 0")
-          td(colspan="8") 
-             div(style="text-align:center")
-              i.fas.fa-2x.fa-spinner.fa-pulse 
+          td(colspan="8")
+            div(style="text-align:center") loading...
         tr(v-for="tx in txs", v-if="txs.length > 0")
-          td       
+          td
             a.d-inline-block.text-truncate(v-bind:href="'/tx/' + tx.hash", style="max-width:200px") {{ tx.hash }}
-          td 
-            a(v-bind:href="'/block/' + tx.blockNumber.toString(10)") {{ tx.blockNumber.toString(10) }}
+          td
+            a(v-bind:href="'/block/' + Number(tx.blockNumber.replace('gd','0x')).toString(10)") {{ Number(tx.blockNumber.replace('gd','0x')).toString(10) }}
           td {{ web3.fromWei(tx.value, 'gdtuer').toString(10) + ' GDTU' }}
           td
-            a.d-inline-block.text-truncate(v-bind:href="'/address/' + tx.from", style="max-width:150px") {{ tx.from }}
-          td 
-            span(v-if="tx.to === 'gd0'") {{ tx.to }}
-            a.d-inline-block.text-truncate(v-if="tx.to !== 'gd0'", v-bind:href="'/address/' + tx.to", style="max-width:150px") {{ tx.to }}
-          td {{ tx.gas.toString(10) }}
+            a.d-inline-block.text-truncate(v-bind:href="'/address/' + tx.from+ '/1/'", style="max-width:150px") {{ tx.from }}
+          td
+            span(v-if="tx.to === '0x0'") {{ tx.to }}
+            a.d-inline-block.text-truncate(v-if="tx.to !== '0x0'", v-bind:href="'/address/' + tx.to+ '/1/'", style="max-width:150px") {{ tx.to }}
+          td {{ Number(tx.gas.replace('gd','0x')).toString(10) }}
           td {{ web3.fromWei(tx.gasPrice, 'gdtuer').toString(10) + ' GDTU' }}
           td {{ web3.fromWei((tx.gas * tx.gasPrice), 'gdtuer').toString(10) + ' GDTU' }}
 
@@ -99,9 +98,10 @@ block contents
 
     var app = new Vue({
       el: '#app',
-      data: { 
+      data: {
         api: null,
         node: null,
+        average: '--',
         gasPrice: null,
         hashrate: null,
         blockNumber: null,
@@ -167,15 +167,6 @@ block contents
       });
     }
 
-    function getBlock(hashStringOrBlockNumber, returnTransactionObjects) {
-      return new Promise((res, rej) => {
-        web3.gdtu.getBlock(hashStringOrBlockNumber, returnTransactionObjects, (error, result) => {
-          if(error) rej(error);
-          else res(result);
-        });
-      });
-    }
-
     function getTransaction(hash) {
       return new Promise((res, rej) => {
         web3.gdtu.getTransaction(hash, (error, result) => {
@@ -185,23 +176,50 @@ block contents
       });
     }
 
-    async function getRecentBlocks(currentBlockNumber, maxCnt, returnTransactionObjects) {
-      var blocks = [];
-      for (var i=0, s=(maxCnt || 10); i < s && currentBlockNumber - i >= 0; i++) {
-        const block = await getBlock(currentBlockNumber - i, returnTransactionObjects)
-        blocks.push(block);
-      }
-      return blocks;
+    async function getRecentBlocks(self) {
+      $.ajax({
+        url: "#{env.GDTU_RPC_URL}/api/v1/block/list",
+        type: "POST",
+        data: {
+          "page_no": 1,
+          "page_size": 10
+        },
+        success: function (data) {
+          self.blocks = data.data.list;
+          self.blockNumber = Number(self.blocks[0].number.replace('gd','0x')).toString(10);
+          self.average = getRecentBlocksAverageTime(self.blocks);
+        },
+        fail: function (err) {
+          console.log(err);
+        }
+      });
     }
-    
-    async function getRecentTxs(txhashs, maxCnt) {
-      var txs = [];
-      for (var i=0, l=txhashs.length, s=(maxCnt || 20)-1; i < s && i < l; i++) {
-        var hash = txhashs[i];
-        if( hash && hash.length )
-          txs.push(await getTransaction(hash));
+
+    function getRecentBlocksAverageTime(data){
+      var result = 0;
+      var t = 0;
+      for(var i=0;i<10;i++){
+         if(i>=1) t += Number(data[i-1].timestamp) - Number(data[i].timestamp);
       }
-      return txs;
+      result = parseInt(t/9);
+      return result;
+    }
+
+    async function getRecentTransactions(self){
+      $.ajax({
+        url: "#{env.GDTU_RPC_URL}/api/v1/transactions/list",
+        type: "POST",
+        data: {
+          "page_no": 1,
+          "page_size": 10
+        },
+        success: function (data) {
+          self.txs = data.data.list;
+        },
+        fail: function (err) {
+          console.log(err);
+        }
+      });
     }
 
     // init Function
@@ -218,34 +236,14 @@ block contents
       var blockNumber = await getBlockNumber();
       self.blockNumber = blockNumber;
 
-      self.blocks = await getRecentBlocks(blockNumber, 10, true);
-      //- console.log(self.blocks);
+      getRecentBlocks(self);
+      setInterval(function (){
+        getRecentBlocks(self);
+      },3000);
 
-      //- getTransactionFromBlock(hashStringOrNumber, indexNumber [, callback])
-      //- var transactions = app.blocks.map(e=>e?e.transactions:null).join(',').split(",");
-      //- self.txs = await getRecentTxs(transactions);
+      getRecentTransactions(self);
+      setInterval(function () {
+        getRecentTransactions(self);
+      }, 3000);
 
-      var transactions = [];
-      self.blocks.forEach(function(block) {
-        //- console.log(e.transactions);
-        if( block && block.transactions && block.transactions.length )
-          transactions = transactions.concat(block.transactions);
-      });
-      self.txs = transactions;
-
-      web3.gdtu.filter("latest", function(error, result){
-        if (!error) {
-          //- console.log(result);
-          getBlock(result, true).then(block => {
-            //- console.log(block);
-            app.blocks.unshift(block);
-            app.blocks.pop();
-            //- getRecentTxs(block.transactions).then(r => app.$data.txs.unshift(r) );
-
-            if( block.transactions.length ) {
-              app.txs = block.transactions.concat(app.txs);
-            }
-          });
-        }
-      });
     }
