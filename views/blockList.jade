@@ -6,8 +6,8 @@ block contents
       div#page
         ul
           li.page
-            a(v-if="current_page > 1" v-bind:href="'/blockList/' + (current_page - 1)") prev
-            a(v-if="current_page > 3" v-bind:href="'/blockList/1'") home
+            a(v-if="current_page > 1" v-bind:href="'/blockList/' + (current_page - 1)") 上一页
+            a(v-if="current_page > 3" v-bind:href="'/blockList/1'") 第一页
             a(v-bind:class="'active'" v-bind:href="'/blockList/' + current_page") {{ current_page }}
             a(v-if="current_page<last_page-3 && current_page+1 < getPage(2)" v-bind:href="'/blockList/' + (current_page + 1)") {{ current_page + 1 }}
             a(v-if="current_page<last_page-3 && current_page+2 < getPage(2)" v-bind:href="'/blockList/' + (current_page + 2)") {{ current_page + 2 }}
@@ -15,18 +15,18 @@ block contents
             a(v-if="current_page<last_page-2" v-bind:href="'/blockList/' + getPage(2)") {{ getPage(2) }}
             a(v-if="current_page<last_page-1" v-bind:href="'/blockList/' + getPage(1)") {{ getPage(1) }}
             a(v-if="current_page<last_page" v-bind:href="'/blockList/' + getPage(0)") {{ getPage(0) }}
-            a(v-if="current_page < last_page - 3" v-bind:href="'/blockList/' + last_page") last
-            a(v-if="current_page < last_page" v-bind:href="'/blockList/' + (current_page + 1)") next
+            a(v-if="current_page < last_page - 3" v-bind:href="'/blockList/' + last_page") 最后一页
+            a(v-if="current_page < last_page" v-bind:href="'/blockList/' + (current_page + 1)") 下一页
     div#list
 
       table.table.table-striped._table-bordered._table-dark.w-100
         thead._thead-light
           tr
-            th Block #
-            th # Tx Hash / Miner
-            th Gas Used / Gas Limit
-            th Difficulty
-            th Timestamp
+            th 区块高度 #
+            th # 区块Hash / 矿工
+            th 燃料使用 / 燃料上限
+            th 难度
+            th 时间
         tbody
           tr(v-if="blocks.length === 0")
             td(colspan="6")
@@ -38,7 +38,7 @@ block contents
               div
                 a(v-bind:href="'/block/' + block.hash.toString(10)") {{ block.hash }}
               div
-                span(style="padding-right:5px;color:#777;") Mine by
+                span(style="padding-right:5px;color:#777;") 出块者
                 a(v-bind:href="'/address/' + block.miner.toString(10)+ '/1/'") {{ block.miner }}
                 //span {{ Number(block.value.replace('gd','0x')).toString(10) }}
             td {{ Number(block.gasUsed.replace('gd','0x')).toString(10) }} / {{ Number(block.gasLimit.replace('gd','0x')).toString(10) }}

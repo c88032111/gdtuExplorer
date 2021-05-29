@@ -6,8 +6,8 @@ block contents
       div#page
         ul
           li.page
-            a(v-if="current_page > 1" v-bind:href="'/blockList/' + (current_page - 1)") prev
-            a(v-if="current_page > 3" v-bind:href="'/blockList/1'") home
+            a(v-if="current_page > 1" v-bind:href="'/blockList/' + (current_page - 1)") 上一页
+            a(v-if="current_page > 3" v-bind:href="'/blockList/1'") 第一页
             a(v-bind:class="'active'" v-bind:href="'/blockList/' + current_page") {{ current_page }}
             a(v-if="current_page<last_page-3&& current_page+1 < getPage(2)" v-bind:href="'/blockList/' + (current_page + 1)") {{ current_page + 1 }}
             a(v-if="current_page<last_page-3 && current_page+2 < getPage(2)" v-bind:href="'/blockList/' + (current_page + 2)") {{ current_page + 2 }}
@@ -15,21 +15,21 @@ block contents
             a(v-if="current_page<last_page-2" v-bind:href="'/blockList/' + getPage(2)") {{ getPage(2) }}
             a(v-if="current_page<last_page-1" v-bind:href="'/blockList/' + getPage(1)") {{ getPage(1) }}
             a(v-if="current_page<last_page" v-bind:href="'/blockList/' + getPage(0)") {{ getPage(0) }}
-            a(v-if="current_page < last_page - 3" v-bind:href="'/blockList/' + last_page") last
-            a(v-if="current_page < last_page" v-bind:href="'/blockList/' + (current_page + 1)") next
+            a(v-if="current_page < last_page - 3" v-bind:href="'/blockList/' + last_page") 最后一页
+            a(v-if="current_page < last_page" v-bind:href="'/blockList/' + (current_page + 1)") 下一页
     div#list
 
     table.table.table-striped._table-bordered._table-dark.w-100
       thead._thead-light
         tr
-          th TxHash
-          th Block
-          th Value
-          th From
-          th To
-          th Gas Used
-          th Gas Price
-          th Tx Fee
+          th 交易Hash
+          th 区块高度
+          th 交易数量
+          th 发送方
+          th 接收方
+          th 燃料使用
+          th 燃料价格
+          th 交易费用
       tbody
         tr(v-if="txs.length === 0")
           td(colspan="8")
@@ -50,7 +50,7 @@ block contents
             div(v-else)
               span(v-if="tx.to === 'gd0'") {{ tx.to }}
               a.d-inline-block.text-truncate(v-if="tx.to !== 'gd0'", v-bind:href="'/address/' + tx.to+ '/1/'", style="max-width:150px") {{ tx.to }}
-          td {{ Number(tx.gas).toString(10) }}
+          td {{ Number(tx.gas.replace('gd','0x')).toString(10) }}
           td {{ web3.fromWei(tx.gasPrice, 'gdtuer').toString(10) + ' GDTU' }}
           td {{ web3.fromWei((tx.gas * tx.gasPrice), 'gdtuer').toString(10) + ' GDTU' }}
 

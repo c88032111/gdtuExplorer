@@ -9,7 +9,7 @@ block contents
     div.text-right
       button.btn.btn-danger.btn-sm.mr-2(v-if="isContractCreation") Contract Creation
 
-      button.btn.btn-primary.btn-sm 
+      button.btn.btn-primary.btn-sm
         span(v-if="confirmations===null")
           i.fas.fa-spinner.fa-pulse
           span.ml-1 Confirmations
@@ -20,97 +20,97 @@ block contents
     //- ========================
     table.table.table-striped.mt-2.w-100
       tr
-        th.w-25 TxHash 
+        th.w-25 交易哈希
         td {{ tx.hash }}
       tr
-        th Nonce 
+        th 随机数
         td {{ tx.nonce }}
       tr
-        th STxReceipt Status 
+        th 状态
         td {{ (tx.transactionIndex===undefined?'Pending':'Success') }}
       tr
-        th Block Height 
-        td 
+        th 区块高度
+        td
           span(v-if="tx.blockNumber===undefined") pending
           a(v-if="tx.blockNumber!==undefined", v-bind:href="'/block/' + tx.blockNumber") {{ tx.blockNumber }}
       tr
-        th Block Hash 
+        th 区块哈希
         td {{ (tx.blockHash || 'pending') }}
       tr
-        th Transaction Index
+        th 交易索引
         td {{ (tx.transactionIndex===undefined?'pending':tx.transactionIndex) }}
       //- tr
         th TimeStamp 
         td {{ tx.timestamp }}
       tr
-        th From 
+        th 发送方
         td
-          a(v-bind:href="'/address/' + tx.from") {{ tx.from }}
+          a(v-bind:href="'/address/' + tx.from+ tx.to + '/1'") {{ tx.from }}
       tr
-        th To 
-        td 
+        th 接收方
+        td
           span(v-if="tx.to === 'gd0'") {{ tx.to }}
-          a(v-if="tx.to !== 'gd0'", v-bind:href="'/address/' + tx.to") {{ tx.to }}
+          a(v-if="tx.to !== 'gd0'", v-bind:href="'/address/' + tx.to + '/1'") {{ tx.to }}
       tr
-        th Value
+        th 交易数量
         td {{ tx.value }} {{ tx.value_gdtu }}
       tr
-        th Gas Limit 
+        th 燃料限制
         td {{ tx.gas }}
       tr
-        th Gas Price 
+        th 燃料价格
         td {{ tx.gasPrice }} {{ tx.gasPrice_gwei }}
       tr
-        th Transaction Price 
+        th 交易费用
         td {{ tx.transactionPrice }}
       tr
-        th Input Data 
+        th 数据输入
         td
           textarea(disabled, readonly) {{ tx.input }}
 
     //- ========================
     //- Transaction Receipt
     //- ========================
-    h2 Receipt
+    h2 收据
     table.table.table-striped.w-100
       tr
-        th.w-25 Contract Address 
-        td {{ txReceipt.contractAddress }}
+        th.w-25 合约地址
+        td {{ txReceipt.contractAddress || "--" }}
       tr
-        th Cumulative Gas Used 
+        th 累计燃料使用
         td {{ txReceipt.cumulativeGasUsed }}
       tr
-        th Gas Used 
+        th 燃料使用
         td {{ txReceipt.gasUsed }}
       tr
-        th Status 
+        th 状态
         td {{ txReceipt.status }}
       tr
         th Logs Bloom 
-        td 
+        td
           textarea(disabled readonly) {{ txReceipt.logsBloom }}
 
     //- ========================
     //- Transaction Receipt Logs
     //- ========================
-    h2 Logs
+    h2 日志
     table.table.table-striped.w-100
       tr
-        th  logIndex
+        th  日志索引
         //- th address 
           th blockNumber
           th blockHash
-        th data
-        th removed
-        th topics
+        th 数据
+        th 是否移除
+        th 专题
         //- th transactionHash 
           th transactionIndex
-       tr(v-for="log in txReceipt.logs")
+      tr(v-for="log in txReceipt.logs")
         td {{ log.logIndex }}
         td {{ log.data }}
         td {{ log.removed }}
         td {{ log.topics.join('<br>') }}
-  
+
   script.
     var hash = '#{hash}';
     var app = new Vue({
@@ -190,7 +190,7 @@ block contents
         var confirm;
         if( blockNumber ) {
           var latestBlockNumber = await getBlockNumber();
-          if( blockNumber !== 0 && blockNumber !== latestBlockNumber ) 
+          if( blockNumber !== 0 && blockNumber !== latestBlockNumber )
             confirm = (latestBlockNumber - blockNumber) + " Confirmations";
         }
         this.confirmations = confirm || 'Unconfirmed';

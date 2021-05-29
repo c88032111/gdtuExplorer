@@ -19,28 +19,30 @@ html(lang="en")
 
       
   body
-    nav.navbar.navbar-expand-md.navbar-dark.bg-dark.fixed-top
-      a.navbar-brand.text-uppercase(href="/") Gdtu(GDTU) Explorer
-      button.navbar-toggler(type="button", data-toggle="collapse", data-target="#navbarsDefault", aria-controls="navbarsDefault", aria-expanded="false", aria-label="Toggle navigation") 
-        span.navbar-toggler-icon
+    div.navbar-dark.bg-dark.fixed-top
+      nav.navbar.navbar-expand-md.menu-box
+        img(src="/logo.png" width="35" style="margin-right:10px;")
+        a.navbar-brand.text-uppercase(href="/") GDTU区块浏览器
+        button.navbar-toggler(type="button", data-toggle="collapse", data-target="#navbarsDefault", aria-controls="navbarsDefault", aria-expanded="false", aria-label="Toggle navigation")
+          span.navbar-toggler-icon
 
-      div.collapse.navbar-collapse#navbarsDefault
-        ul.navbar-nav.mr-auto
-          li.nav-item
-            a.nav-link(href="/") Home
-              span.sr-only (current)
-          li.nav-item
-            a.nav-link(href="/blockList/1") Block
-          li.nav-item
-            a.nav-link(href="/transactionsList/1") Transactions
-          li.nav-item
-            a.nav-link(href="/accountsList/1") Accounts
-          li.nav-item
-            a.nav-link(href="/watch") Watch
+        div.collapse.navbar-collapse#navbarsDefault
+          ul.navbar-nav.mr-auto
+            li.nav-item
+              a.nav-link(href="/") 首页
+                span.sr-only (current)
+            li.nav-item
+              a.nav-link(href="/blockList/1") 所有区块
+            li.nav-item
+              a.nav-link(href="/transactionsList/1") 交易记录
+            li.nav-item
+              a.nav-link(href="/accountsList/1") 账户持仓
+            li.nav-item
+              a.nav-link(href="/watch") 观察钱包
 
-        form.form-inline.my-2.my-lg-0#searchForm
-          input.form-control.mr-sm-2(type="search", name="search", size="50", placeholder="Search for Account, Tx Hash or Data", aria-label="Search", required, autofocus)
-          button.btn.btn-outline-success.my-2.my-sm-0(type="submit") Search
+          form.form-inline.my-2.my-lg-0#searchForm
+            input.form-control.mr-sm-2(type="search", name="search", size="50", placeholder="账户、交易hash", aria-label="Search", required, autofocus)
+            button.btn.btn-outline-success.my-2.my-sm-0(type="submit") 搜索
 
     main.container(role="main")
       block contents
@@ -49,6 +51,18 @@ html(lang="en")
     script(src="/popper.min.js", integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49", crossorigin="anonymous")
     script(src="/bootstrap.min.js", integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T", crossorigin="anonymous")
     script.
+
+      var blockNumber = 0;
+
+      function getBlockNumber() {
+        return new Promise((res, rej) => {
+          web3.gdtu.getBlockNumber((error, result) => {
+            blockNumber = result;
+            console.log("blockNumber=", blockNumber);
+          });
+        });
+      }
+
       $("#navbarsDefault a").each(function(i, e){
         if( location.href == e.href ) {
           e.closest("li.nav-item").classList.add("active");

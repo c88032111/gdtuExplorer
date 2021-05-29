@@ -13,6 +13,35 @@ body {
   /* text-align: center; */
 }
 
+.form-control,
+.form-control:focus{
+  box-shadow: none;
+  border-color: #28a745;
+  background: none;
+}
+.form-control:focus {
+  border-color: #28a745;
+}
+
+.nav-item.active:before{
+  content: "";
+  position: absolute;
+  left: 10px;
+  height: 4px;
+  background-color: #f1a04f;
+  right: 12px;
+  bottom: -9px;
+}
+
+.nav-item{
+  position: relative;
+}
+
+.menu-box{
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
 table textarea {resize: none;width:100%}
 table tr,td,th{text-align:left !important;;vertical-align:top !important;}
 

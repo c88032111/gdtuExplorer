@@ -9,12 +9,12 @@ block contents
       table.table.table-striped.table-bordered._table-sm.w-100
         thead
           tr
-            th.w-25 Balance
+            th.w-25 余额
             td
               i.fas.fa-lg.fa-spinner.fa-pulse(v-if="balance===null")
               {{ balance_gdtu || '--' }}
           tr
-            th Balance(USD)
+            th 余额估值(USD)
             td
               i.fas.fa-lg.fa-spinner.fa-pulse(v-if="balance_usd===null")
               {{ balance_usd || '--' }}
@@ -24,7 +24,7 @@ block contents
               i.fas.fa-lg.fa-spinner.fa-pulse(v-if="storage===null")
               {{ storage }}
           tr
-            th Transaction Count
+            th 交易数量
             td
               i.fas.fa-lg.fa-spinner.fa-pulse(v-if="transactionCount===null")
               {{ transactionCount }}
@@ -35,12 +35,12 @@ block contents
 
       br
       div
-        h1#page-box Related transactions
+        h1#page-box 全部交易记录
           div#page
             ul
               li.page
-                a(v-if="current_page > 1" v-bind:href="'/blockList/' + (current_page - 1)") prev
-                a(v-if="current_page > 3" v-bind:href="'/blockList/1'") home
+                a(v-if="current_page > 1" v-bind:href="'/blockList/' + (current_page - 1)") 上一页
+                a(v-if="current_page > 3" v-bind:href="'/blockList/1'") 第一页
                 a(v-bind:class="'active'" v-bind:href="'/blockList/' + current_page") {{ current_page }}
                 a(v-if="current_page<last_page-3&& current_page+1 < getPage(2)" v-bind:href="'/blockList/' + (current_page + 1)") {{ current_page + 1 }}
                 a(v-if="current_page<last_page-3 && current_page+2 < getPage(2)" v-bind:href="'/blockList/' + (current_page + 2)") {{ current_page + 2 }}
@@ -48,22 +48,22 @@ block contents
                 a(v-if="current_page<last_page-2" v-bind:href="'/blockList/' + getPage(2)") {{ getPage(2) }}
                 a(v-if="current_page<last_page-1" v-bind:href="'/blockList/' + getPage(1)") {{ getPage(1) }}
                 a(v-if="current_page<last_page" v-bind:href="'/blockList/' + getPage(0)") {{ getPage(0) }}
-                a(v-if="current_page < last_page - 3" v-bind:href="'/blockList/' + last_page") last
-                a(v-if="current_page < last_page" v-bind:href="'/blockList/' + (current_page + 1)") next
+                a(v-if="current_page < last_page - 3" v-bind:href="'/blockList/' + last_page") 最后一页
+                a(v-if="current_page < last_page" v-bind:href="'/blockList/' + (current_page + 1)") 下一页
 
       div#list
 
       table.table.table-striped._table-bordered._table-dark.w-100
         thead._thead-light
           tr
-            th TxHash
-            th Block
-            th Value
-            th From
-            th To
-            th Gas Used
-            th Gas Price
-            th Tx Fee
+            th 交易Hash
+            th 区块高度
+            th 交易数量
+            th 发送方
+            th 接收方
+            th 燃料使用
+            th 燃料价格
+            th 交易费用
         tbody
           tr(v-if="txs.length === 0")
             td(colspan="8")

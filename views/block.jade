@@ -11,51 +11,51 @@ block contents
     //- ========================
     table.table.table-striped
       tr
-        td.w-25 Height
+        td.w-25 区块高度
         td {{ block.number }}
       tr
-        td TimeStamp
+        td 时间
         td {{ new Date(block.timestamp * 1000).Format("yyyy/MM/dd hh:mm:ss") }}
       tr
-        td Transactions
+        td 交易数量
         td {{ block.transactions.length }} transactions
       tr
-        td Hash
+        td 区块哈希
         td {{ (block.hash || 'pending') }}
       tr
-        td Parent Hash
+        td 上一个区块哈希
         td {{ block.parentHash }}
       tr
-        td Sha3Uncles
+        td 叔块
         td {{ block.sha3Uncles }}
       tr
-        td Mined By
+        td 出块者
         td
           span(v-if="block.miner === undefined") pending
-          a(v-if="block.miner !== undefined", v-bind:href="'/address/' +  block.miner.replace('gd','gd')") {{  block.miner.replace('gd','gd') }}
+          a(v-if="block.miner !== undefined", v-bind:href="'/address/' +  block.miner") {{  block.miner }}
       tr
-        td Difficulty
+        td 难度
         td {{ block.difficulty }}
       tr
-        td Total Difficulty
+        td 累计难度
         td {{ block.totalDifficulty }}
       tr
-        td Size
+        td 尺寸
         td {{ block.size }} bytes
       tr
-        td Gas Used
+        td 燃料使用
         td {{ block.gasUsed }}
       tr
-        td Gas Limit
+        td 燃料限制
         td {{ block.gasLimit }}
       tr
-        td Nonce
+        td 随机数
         td {{ block.nonce }}
       tr
-        td Extra Data
+        td 额外数据
         td {{ block.extraData }}
       tr
-        td Extra Data (Translated)
+        td 额外数据 (交易)
         td {{ web3.toAscii(block.extraData) }}
       tr
         td logsBloom
@@ -74,16 +74,16 @@ block contents
         td transactionsRoot
         td {{ block.transactionsRoot }}
       tr
-        td uncles
+        td 叔块
         td {{ block.uncles }}
 
     //- ========================
     //- Transactions
     //- ========================
-    h2 Transactions
+    h2 交易明细
     table.table.table-striped.w-100
       tr 
-        th Transaction Hash
+        th 交易哈希
       tr(v-for="tx in block.transactions", v-if="block.transactions")
         td
           a(v-bind:href="'/tx/' +tx") {{ tx }}

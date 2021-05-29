@@ -2157,7 +2157,6 @@ require=(function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=
      */
     var fromWei = function(number, unit) {
       var returnValue = toBigNumber(number).dividedBy(getValueOfUnit(unit));
-
       return isBigNumber(number) ? returnValue : returnValue.toString(10);
     };
 

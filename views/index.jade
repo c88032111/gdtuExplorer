@@ -8,12 +8,12 @@ block contents
     table.table._table-striped.table-bordered._table-dark.w-100
       thead.thead-light
         tr
-          th(width="12%") Current Block
-          th(width="10%") API Version
-          th(width="*") Client/Node Version
-          th(width="24%") Recent 10 blocks Average time
-          th(width="14%") Current Gas Price
-          //th(width="14%") Hashrate
+          th(width="12%") 当前区块
+          th(width="10%") API版本
+          th(width="*") 客户端/节点版本
+          th(width="24%") 最近10个区块平均出块时间
+          th(width="14%") 当前燃料价格
+          //th(width="14%") 算力
       tr
         td
           a(v-bind:href="'/block/' + blockNumber") {{ blockNumber }}
@@ -30,16 +30,16 @@ block contents
     //- Recent Blocks
     //- ========================
     h1
-      span.ml-1 Recent Blocks
+      span.ml-1 最近区块
 
     table.table.table-striped._table-bordered._table-dark.w-100
       thead._thead-light
         tr
-          th Block #
-          th # Tx Hash / Miner
-          th Gas Used / Gas Limit
-          th Difficulty
-          th Timestamp
+          th 高度 #
+          th # 区块Hash / 矿工
+          th 燃料使用 / 燃料上限
+          th 难度
+          th 时间
       tbody
       tr(v-if="blocks.length === 0")
         td(colspan="6")
@@ -51,7 +51,7 @@ block contents
           div
             a(v-bind:href="'/block/' + block.hash.toString(10)") {{ block.hash }}
           div
-            span(style="padding-right:5px;color:#777;") Mine by
+            span(style="padding-right:5px;color:#777;") 出块者
             a(v-bind:href="'/address/' + block.miner.toString(10)+ '/1/'") {{ block.miner }}
             //span {{ Number(block.value.replace('gd','0x')).toString(10) }}
         td {{ Number(block.gasUsed.replace('gd','0x')).toString(10) }} / {{ Number(block.gasLimit.replace('gd','0x')).toString(10) }}
@@ -62,19 +62,19 @@ block contents
     //- Recent Transactions
     //- ========================
     h1
-      span.ml-1 Recent Transactions
+      span.ml-1 最近交易
 
     table.table.table-striped._table-bordered._table-dark.w-100
       thead._thead-light
         tr
-          th TxHash
-          th Block
-          th Value
-          th From
-          th To
-          th Gas Used
-          th Gas Price
-          th Tx Fee
+          th 交易Hash
+          th 区块高度
+          th 交易数量
+          th 发送方
+          th 接收方
+          th 燃料使用
+          th 燃料价格
+          th 交易费用
       tbody
         tr(v-if="txs.length === 0")
           td(colspan="8")
