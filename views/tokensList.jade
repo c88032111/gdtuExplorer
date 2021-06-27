@@ -6,42 +6,46 @@ block contents
       div#page
         ul
           li.page
-            a(v-if="current_page > 1" v-bind:href="'/tokensList/' + (current_page - 1)") 上一页
-            a(v-if="current_page > 3" v-bind:href="'/tokensList/1'") 第一页
-            a(v-bind:class="'active'" v-bind:href="'/tokensList/' + current_page") {{ current_page }}
-            a(v-if="current_page<last_page-3&& current_page+1 < getPage(2)" v-bind:href="'/tokensList/' + (current_page + 1)") {{ current_page + 1 }}
-            a(v-if="current_page<last_page-3 && current_page+2 < getPage(2)" v-bind:href="'/tokensList/' + (current_page + 2)") {{ current_page + 2 }}
+            a(v-if="current_page > 1" v-bind:href="'/tokensList/' + (current_page - 1) + '/gdtu/'") 上一页
+            a(v-if="current_page > 3" v-bind:href="'/tokensList/1/gdtu'") 第一页
+            a(v-bind:class="'active'" v-bind:href="'/tokensList/' + current_page + '/gdtu/'") {{ current_page }}
+            a(v-if="current_page<last_page-3&& current_page+1 < getPage(2)" v-bind:href="'/tokensList/' + (current_page + 1) + '/gdtu/'") {{ current_page + 1 }}
+            a(v-if="current_page<last_page-3 && current_page+2 < getPage(2)" v-bind:href="'/tokensList/' + (current_page + 2) + '/gdtu/'") {{ current_page + 2 }}
             span(v-if="current_page<last_page-5") ...
-            a(v-if="current_page<last_page-2" v-bind:href="'/tokensList/' + getPage(2)") {{ getPage(2) }}
-            a(v-if="current_page<last_page-1" v-bind:href="'/tokensList/' + getPage(1)") {{ getPage(1) }}
-            a(v-if="current_page<last_page" v-bind:href="'/tokensList/' + getPage(0)") {{ getPage(0) }}
-            a(v-if="current_page < last_page - 3" v-bind:href="'/tokensList/' + last_page") 最后一页
-            a(v-if="current_page < last_page" v-bind:href="'/tokensList/' + (current_page + 1)") 下一页
+            a(v-if="current_page<last_page-2" v-bind:href="'/tokensList/' + getPage(2) + '/gdtu/'") {{ getPage(2) }}
+            a(v-if="current_page<last_page-1" v-bind:href="'/tokensList/' + getPage(1) + '/gdtu/'") {{ getPage(1) }}
+            a(v-if="current_page<last_page" v-bind:href="'/tokensList/' + getPage(0) + '/gdtu/'") {{ getPage(0) }}
+            a(v-if="current_page < last_page - 3" v-bind:href="'/tokensList/' + last_page + '/gdtu/'") 最后一页
+            a(v-if="current_page < last_page" v-bind:href="'/tokensList/' + (current_page + 1) + '/gdtu/'") 下一页
     div#list
 
-    table.table.table-striped._table-bordered._table-dark.w-100
-      thead._thead-light
-        tr
-          th #
-          th 代币
-          th 合约地址
-          th 总供应
-          th 持币人数
-      tbody
-        tr(v-if="tokens.length === 0")
-          td(colspan="8")
-            div(style="text-align:center" v-if="loading") 加载中...
-            div(style="text-align:center" v-else) 没有数据
-        tr(v-for="(token,index) in tokens", v-if="tokens.length > 0")
-          td {{ getRank(index) }}
-          td
-            h5(style="color:#555;font-size:16px;padding:0;margin:0px;line-height:20px;font-weight:500;")
-              a.d-inline-block.text-truncate(v-bind:href="'/tokens/' + token.address + '/tab_trade/1/'", style="max-width:400px") {{ token.symbol }}
-            p(style="opacity:0.5;line-height:1.5em;padding:0;margin:0px;text-indent:0em;") {{ token.name }}
-          td {{ token.address }}
-          td {{ token.totalSupply }}
-          td
-            a(v-bind:href="'/tokens/'+token.address+'/tab_holds/1'") {{ token.holds }}
+      table.table.table-striped._table-bordered._table-dark.w-100
+        thead._thead-light
+          tr
+            th #
+            th 代币
+            th 合约地址
+            th 总供应
+            th 持币人数
+        tbody
+          tr(v-if="tokens.length === 0")
+            td(colspan="8")
+              div(style="text-align:center" v-if="loading") 加载中...
+              div(style="text-align:center" v-else) 没有数据
+          tr(v-for="(token,index) in tokens", v-if="tokens.length > 0")
+            td {{ getRank(index) }}
+            td
+              h5(style="color:#555;font-size:16px;padding:0;margin:0px;line-height:20px;font-weight:500;")
+                a.d-inline-block.text-truncate(v-bind:href="'/tokens/' + token.address + '/tab_trade/1/'", style="max-width:400px")
+                  span(v-if="keyword" v-html="token.symbol.replace(keyword,'<font color=\"red\">'+keyword+'</font>')")
+                  span(v-else) token.symbol
+              p(style="color:#999;line-height:1.5em;padding:0;margin:0px;text-indent:0em;")
+                span(v-if="keyword" v-html="token.name.replace(keyword,'<font color=\"red\">'+keyword+'</font>')")
+                span(v-else) token.name
+            td {{ token.address }}
+            td {{ token.totalSupply }}
+            td
+              a(v-bind:href="'/tokens/'+token.address+'/tab_holds/1'") {{ token.holds }}
 
   script.
 
@@ -49,6 +53,7 @@ block contents
       el: '#app',
       data: {
         loading: true,
+        keyword: '#{ keyword }' || null,
         current_page: #{ current_page } || 1,
         size : 10,
         last_page: 1,
@@ -76,7 +81,8 @@ block contents
           type : "POST",
           data : {
             "page_no": self.current_page,
-            "page_size": self.size
+            "page_size": self.size,
+            "keyword": self.keyword
           },
           success : function (data){
             self.loading = false;

@@ -89,10 +89,12 @@ app.get('/accountsList/:current_page/', function (req, res, next) {
   });
 });
 
-app.get('/tokensList/:current_page/', function (req, res, next) {
+app.get('/tokensList/:current_page/:keyword/', function (req, res, next) {
   var current_page = req.params['current_page'];
+  var keyword = req.params['keyword'];
   res.render('tokensList', {
     title: '代币列表（GRC-20）',
+    keyword: keyword,
     current_page: current_page
   });
 });
