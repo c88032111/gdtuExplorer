@@ -16,7 +16,7 @@ block contents
     div.card.float-left.mr-2.mt-2(style="width:31rem", v-for="(watch, index) in watchs")
       div.card-body
         h6.card-title.text-monospace 
-          a(v-bind:href="'/address/' + watch.address") {{ watch.address }}
+          a(v-bind:href="'/address/' + watch.address + '/1'") {{ watch.address }}
           span.badge.badge-info(v-if='watch.isContract') 合约地址
             //- i.fas.fa-chevron-right
         h6.card-subtitle.mb-2.text-muted

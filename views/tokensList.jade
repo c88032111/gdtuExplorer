@@ -1,0 +1,111 @@
+extends layout/default_layout
+
+block contents
+  div#app
+    h1#page-box=title
+      div#page
+        ul
+          li.page
+            a(v-if="current_page > 1" v-bind:href="'/tokensList/' + (current_page - 1)") 上一页
+            a(v-if="current_page > 3" v-bind:href="'/tokensList/1'") 第一页
+            a(v-bind:class="'active'" v-bind:href="'/tokensList/' + current_page") {{ current_page }}
+            a(v-if="current_page<last_page-3&& current_page+1 < getPage(2)" v-bind:href="'/tokensList/' + (current_page + 1)") {{ current_page + 1 }}
+            a(v-if="current_page<last_page-3 && current_page+2 < getPage(2)" v-bind:href="'/tokensList/' + (current_page + 2)") {{ current_page + 2 }}
+            span(v-if="current_page<last_page-5") ...
+            a(v-if="current_page<last_page-2" v-bind:href="'/tokensList/' + getPage(2)") {{ getPage(2) }}
+            a(v-if="current_page<last_page-1" v-bind:href="'/tokensList/' + getPage(1)") {{ getPage(1) }}
+            a(v-if="current_page<last_page" v-bind:href="'/tokensList/' + getPage(0)") {{ getPage(0) }}
+            a(v-if="current_page < last_page - 3" v-bind:href="'/tokensList/' + last_page") 最后一页
+            a(v-if="current_page < last_page" v-bind:href="'/tokensList/' + (current_page + 1)") 下一页
+    div#list
+
+    table.table.table-striped._table-bordered._table-dark.w-100
+      thead._thead-light
+        tr
+          th #
+          th 代币
+          th 合约地址
+          th 总供应
+          th 持币人数
+      tbody
+        tr(v-if="tokens.length === 0")
+          td(colspan="8")
+            div(style="text-align:center" v-if="loading") 加载中...
+            div(style="text-align:center" v-else) 没有数据
+        tr(v-for="(token,index) in tokens", v-if="tokens.length > 0")
+          td {{ getRank(index) }}
+          td
+            h5(style="color:#555;font-size:16px;padding:0;margin:0px;line-height:20px;font-weight:500;")
+              a.d-inline-block.text-truncate(v-bind:href="'/tokens/' + token.address + '/tab_trade/1/'", style="max-width:400px") {{ token.symbol }}
+            p(style="opacity:0.5;line-height:1.5em;padding:0;margin:0px;text-indent:0em;") {{ token.name }}
+          td {{ token.address }}
+          td {{ token.totalSupply }}
+          td
+            a(v-bind:href="'/tokens/'+token.address+'/tab_holds/1'") {{ token.holds }}
+
+  script.
+
+    var app = new Vue({
+      el: '#app',
+      data: {
+        loading: true,
+        current_page: #{ current_page } || 1,
+        size : 10,
+        last_page: 1,
+        tokens: []
+      },
+      created: function() {
+        init.bind(this)();
+      }
+    });
+
+    function getBlockNumber() {
+      return new Promise((res, rej) => {
+        web3.gdtu.getBlockNumber((error, result) => {
+          if(error) rej(error);
+          else res(result);
+        });
+      });
+    }
+
+    async function getTokens(self) {
+      return new Promise((res, rej) => {
+        self.loading = true;
+        $.ajax({
+          url : "#{env.GDTU_RPC_URL}/api/v1/token/list",
+          type : "POST",
+          data : {
+            "page_no": self.current_page,
+            "page_size": self.size
+          },
+          success : function (data){
+            self.loading = false;
+            let result = data.data;
+            res(result);
+          },
+          fail: function (err){
+            self.loading = false;
+            console.log(err);
+            rej(err);
+          }
+        });
+      });
+    }
+
+    function  getRank(i){
+      var self = app || this;
+      return ((self.current_page-1) * self.size) + i + 1
+    }
+
+    function getPage(n){
+      let self = app || this;
+      return self.current_page<(self.last_page-10-n)?(self.current_page + 10 + 2 - n):(self.last_page-n);
+    }
+
+    // init Function
+    async function init() {
+      var self = app || this;
+      var result = await getTokens(self)
+      self.tokens = result.list;
+      self.last_page = Math.ceil(result.total / result.page_size) ;
+    }

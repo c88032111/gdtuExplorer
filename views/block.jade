@@ -15,7 +15,9 @@ block contents
         td {{ block.number }}
       tr
         td 时间
-        td {{ new Date(block.timestamp * 1000).Format("yyyy/MM/dd hh:mm:ss") }}
+        td
+          span(v-if="block.timestamp") {{ new Date(block.timestamp * 1000).Format("yyyy/MM/dd hh:mm:ss") }}
+          span(v-else) --
       tr
         td 交易数量
         td {{ block.transactions.length }} transactions

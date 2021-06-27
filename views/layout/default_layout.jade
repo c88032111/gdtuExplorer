@@ -38,10 +38,12 @@ html(lang="en")
             li.nav-item
               a.nav-link(href="/accountsList/1") 账户持仓
             li.nav-item
+              a.nav-link(href="/tokensList/1") 所有代币
+            li.nav-item
               a.nav-link(href="/watch") 观察钱包
 
           form.form-inline.my-2.my-lg-0#searchForm
-            input.form-control.mr-sm-2(type="search", name="search", size="50", placeholder="账户、交易hash", aria-label="Search", required, autofocus)
+            input.form-control.mr-sm-2(type="search", name="search", size="50", placeholder="账户、交易hash、代币名称", aria-label="Search", required, autofocus)
             button.btn.btn-outline-success.my-2.my-sm-0(type="submit") 搜索
 
     main.container(role="main")

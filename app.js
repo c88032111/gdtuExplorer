@@ -7,8 +7,8 @@ var bodyParser = require('body-parser');
 var app = express();
 
 // set env vars down to jade
-process.env.GDTU_RPC_URL = process.env.GDTU_RPC_URL || "http://18.207.130.23:2020"
-// process.env.GDTU_RPC_URL = process.env.GDTU_RPC_URL || "//127.0.0.1:2020"
+// process.env.GDTU_RPC_URL = process.env.GDTU_RPC_URL || "http://18.207.130.23:2020"
+process.env.GDTU_RPC_URL = process.env.GDTU_RPC_URL || "//127.0.0.1:2020"
 app.locals.env = process.env;
 
 // view engine setup
@@ -23,14 +23,14 @@ app.use(bodyParser.json());
 
 app.get('/', function (req, res, next) {
   res.render('index', {
-    title: 'The Gdtu Block Explorer'
+    title: 'GDTU区块浏览器'
   });
 });
 
 app.get('/block/:number/', function (req, res, next) {
   var number = req.params['number'];
   res.render('block', {
-    title: 'Block',
+    title: '区块详情',
     number: number
   });
 });
@@ -38,8 +38,20 @@ app.get('/block/:number/', function (req, res, next) {
 app.get('/tx/:hash/', function (req, res, next) {
   var hash = req.params['hash'];
   res.render('transaction', {
-    title: 'Transaction',
+    title: '交易详情',
     hash: hash
+  });
+});
+
+app.get('/tokens/:contracts_address/:current_tab/:current_page/', function (req, res, next) {
+  var contractsAddress = req.params['contracts_address'];
+  var current_page = req.params['current_page'];
+  var current_tab = req.params['current_tab'];
+  res.render('tokens', {
+    title: ' ',
+    contracts_address: contractsAddress,
+    current_page: current_page,
+    current_tab: current_tab
   });
 });
 
@@ -47,7 +59,7 @@ app.get('/address/:address/:current_page/', function (req, res, next) {
   var address = req.params['address'];
   var current_page = req.params['current_page'];
   res.render('address', {
-    title: 'Address',
+    title: '地址详情',
     address: address,
     current_page: current_page
   });
@@ -56,7 +68,7 @@ app.get('/address/:address/:current_page/', function (req, res, next) {
 app.get('/blockList/:current_page/', function (req, res, next) {
   var current_page = req.params['current_page'];
   res.render('blockList', {
-    title: 'blockList',
+    title: '区块列表',
     current_page: current_page
   });
 });
@@ -64,7 +76,7 @@ app.get('/blockList/:current_page/', function (req, res, next) {
 app.get('/transactionsList/:current_page/', function (req, res, next) {
   var current_page = req.params['current_page'];
   res.render('transactionsList', {
-    title: 'transactionsList',
+    title: '交易列表',
     current_page: current_page
   });
 });
@@ -72,14 +84,22 @@ app.get('/transactionsList/:current_page/', function (req, res, next) {
 app.get('/accountsList/:current_page/', function (req, res, next) {
   var current_page = req.params['current_page'];
   res.render('accountsList', {
-    title: 'accountsList',
+    title: '账户列表',
+    current_page: current_page
+  });
+});
+
+app.get('/tokensList/:current_page/', function (req, res, next) {
+  var current_page = req.params['current_page'];
+  res.render('tokensList', {
+    title: '代币列表（GRC-20）',
     current_page: current_page
   });
 });
 
 app.get('/watch', function (req, res, next) {
   res.render('watch', {
-    title: 'Watch'
+    title: '所有地址'
   });
 });
 

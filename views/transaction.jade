@@ -93,7 +93,7 @@ block contents
     //- ========================
     //- Transaction Receipt Logs
     //- ========================
-    h2 日志
+    h2 事件日志（{{ txReceipt&&txReceipt.logs?txReceipt.logs.length:0 }}）
     table.table.table-striped.w-100
       tr
         th  日志索引
@@ -107,9 +107,9 @@ block contents
           th transactionIndex
       tr(v-for="log in txReceipt.logs")
         td {{ log.logIndex }}
-        td {{ log.data }}
+        td {{ getValue(log.data) }} {{ symbol }}
         td {{ log.removed }}
-        td {{ log.topics.join('<br>') }}
+        td(v-html="getTopics(log.topics)")
 
   script.
     var hash = '#{hash}';
@@ -118,6 +118,8 @@ block contents
       data: {
         isShow: false,
         hash: '#{hash}',
+        decimals: 18,
+        symbol: '',
         confirmations: null,
         tx: {},
         txReceipt: {},
@@ -151,9 +153,21 @@ block contents
       return new Promise((res, rej) => {
         web3.gdtu.getTransactionReceipt(hash, (error, result) => {
           if(error) rej(error);
-          else res(result);
+          else{
+            res(result);
+          }
         });
       });
+    }
+
+    function getValue(data){
+      var self = app;
+      data = data.replace('gd','0x');
+      return web3.toBigNumber(web3.toBigNumber(data)/Math.pow(10,self.decimals));
+    }
+
+    function getTopics(data){
+      return data.join('<br>');
     }
 
     function getCode(contractAddress) {
@@ -161,6 +175,28 @@ block contents
         web3.gdtu.getCode(contractAddress, (error, result) => {
           if(error) rej(error);
           else res(result);
+        });
+      });
+    }
+
+    function getTokenInfo(self,txReceipt) {
+      return new Promise((res, rej) => {
+        $.ajax({
+          url: "#{env.GDTU_RPC_URL}/api/v1/token/info",
+          type: "POST",
+          data: {
+            "contracts_address": txReceipt.to
+          },
+          success: function (data) {
+            let result = data.data;
+            self.decimals = Number(result.decimals);
+            self.symbol = result.symbol;
+            res(txReceipt);
+          },
+          fail: function (err) {
+            console.log(err);
+            rej(err);
+          }
         });
       });
     }
@@ -184,7 +220,9 @@ block contents
         tx.gasPrice = tx.gasPrice.toString(10);
         self.tx = tx;
 
-        self.txReceipt = await getTransactionReceipt(hash);
+
+        let txReceipt  = await getTransactionReceipt(hash);
+        self.txReceipt = await getTokenInfo(self,txReceipt);
 
         var blockNumber = self.tx.blockNumber;
         var confirm;

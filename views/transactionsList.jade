@@ -31,15 +31,14 @@ block contents
           th 燃料价格
           th 交易费用
       tbody
-        tr(v-if="txs.length === 0")
+        tr(v-if="!txs || txs.length === 0")
           td(colspan="8")
-            div(style="text-align:center")
-              i.fas.fa-2x.fa-spinner.fa-pulse
+            div(style="text-align:center") 没有相关交易记录
         tr(v-for="tx in txs", v-if="txs.length > 0")
           td
             a.d-inline-block.text-truncate(v-bind:href="'/tx/' + tx.hash", style="max-width:200px") {{ tx.hash }}
           td
-            a(v-bind:href="'/block/' + Number(tx.blockNumber).toString(10)") {{ Number(tx.blockNumber.replace('gd','0x')).toString(10) }}
+            a(v-bind:href="'/block/' + Number(tx.blockNumber.replace('gd','0x')).toString(10)") {{ Number(tx.blockNumber.replace('gd','0x')).toString(10) }}
           td {{ web3.fromWei(tx.value, 'gdtuer').toString(10) + ' GDTU' }}
           td
             span(v-if="!tx.from") --

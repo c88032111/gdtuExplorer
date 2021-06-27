@@ -1,0 +1,217 @@
+extends layout/default_layout
+
+block contents
+
+  div#app(v-cloak)
+    h1 代币{{ tokenInfo.symbol }}详情
+    div
+      table.table.table-striped.table-bordered._table-sm.w-100
+        thead
+          tr
+            th 全名:
+              td {{ tokenInfo.name || '--' }}
+          tr
+            th Max 总供应量:
+              td {{ tokenInfo.totalSupply || '--' }}
+          tr
+            th 合约地址:
+              td {{ tokenInfo.address|| '--' }}
+          tr
+            th 小数点:
+              td {{ tokenInfo.decimals }} 位
+          tr
+            th 持有人:
+              td {{ tokenInfo.holds || '0' }} 人
+
+      br
+      div
+        div#page-box &nbsp;
+          ol.tab
+            li(v-bind:class="current_tab==='tab_trade'?'active':''")
+              a(v-bind:href="'/tokens/' + contracts_address + '/tab_trade/1'") 代币交易
+            li(v-bind:class="current_tab==='tab_holds'?'active':''")
+              a(v-bind:href="'/tokens/' + contracts_address + '/tab_holds/1'") 持有人
+          div#page
+            ul
+              li.page
+                a(v-if="current_page > 1" v-bind:href="'/tokens/' + contracts_address + '/' + current_tab + '/' + (current_page - 1)") 上一页
+                a(v-if="current_page > 3" v-bind:href="'/tokens/' + contracts_address + '/' + current_tab + '/1'") 第一页
+                a(v-bind:class="'active'" v-bind:href="'/tokens/' + contracts_address + '/' + current_tab + '/' + current_page") {{ current_page }}
+                a(v-if="current_page<last_page-3&& current_page+1 < getPage(2)" v-bind:href="'/tokens/' + contracts_address + '/' + current_tab + '/' + (current_page + 1)") {{ current_page + 1 }}
+                a(v-if="current_page<last_page-3 && current_page+2 < getPage(2)" v-bind:href="'/tokens/' + contracts_address + '/' + current_tab + '/' + (current_page + 2)") {{ current_page + 2 }}
+                span(v-if="current_page<last_page-5") ...
+                a(v-if="current_page<last_page-2" v-bind:href="'/tokens/' + contracts_address + '/' + current_tab + '/' + getPage(2)") {{ getPage(2) }}
+                a(v-if="current_page<last_page-1" v-bind:href="'/tokens/' + contracts_address + '/' + current_tab + '/' + getPage(1)") {{ getPage(1) }}
+                a(v-if="current_page<last_page" v-bind:href="'/tokens/' + contracts_address + '/' + current_tab + '/' + getPage(0)") {{ getPage(0) }}
+                a(v-if="current_page < last_page - 3" v-bind:href="'/tokens/' + contracts_address + '/' + current_tab + '/' + last_page") 最后一页
+                a(v-if="current_page < last_page" v-bind:href="'/tokens/' + contracts_address + '/' + current_tab + '/' + (current_page + 1)") 下一页
+
+      div#list
+
+        table.table.table-striped._table-bordered._table-dark.w-100(v-if="current_tab==='tab_trade'")
+          thead._thead-light
+            tr
+              th 交易Hash
+              th 合约方法
+              th 高度
+              th 发送方
+              th 接收方
+              th 数量
+          tbody
+            tr(v-if="txs.length === 0")
+              td(colspan="8")
+                div(style="text-align:center") {{ data_state }}
+            tr(v-for="tx in txs", v-if="txs.length > 0")
+              td
+                a.d-inline-block.text-truncate(v-bind:href="'/tx/' + tx.hash", style="max-width:200px") {{ tx.hash }}
+              td {{ tx.input.substring(0,10) }}
+              td
+                a(v-bind:href="'/block/' + Number(tx.blockNumber.replace('gd','0x')).toString(10)") {{ Number(tx.blockNumber.replace('gd','0x')).toString(10) }}
+              td
+                span(v-if="!tx.from") --
+                div(v-else)
+                  a.d-inline-block.text-truncate(v-bind:href="'/address/' + tx.from+ '/1/'", style="max-width:150px") {{ tx.from }}
+              td
+                span(v-if="!tx.to") --
+                div(v-else)
+                  a.d-inline-block.text-truncate(v-bind:href="'/address/' + tx.to+ '/1/'", style="max-width:150px") {{ tx.to }}
+              td {{ tx.contract_value/Math.pow(10,tokenInfo.decimals) }}
+        table.table.table-striped._table-bordered._table-dark.w-100(v-if="current_tab==='tab_holds'")
+          thead._thead-light
+            tr
+              th 排名
+              th 地址
+              th 数量
+              th 百分比
+          tbody
+            tr(v-if="txs.length === 0")
+              td(colspan="4")
+                div(style="text-align:center") {{ data_state }}
+            tr(v-for="(tx,index) in txs", v-if="txs.length > 0")
+              td {{ getRank(index) }}
+              td
+                a.d-inline-block.text-truncate(v-bind:href="'/address/' + tx.address + '/1/'", style="max-width:400px") {{ tx.address }}
+              td {{ tx.balance }}
+              td {{ setPercent(tx.balance) }}%
+
+  script.
+
+    var app = new Vue({
+      el: '#app',
+      data: {
+        current_tab: '#{ current_tab }' || 'tab_trade',
+        current_page: #{ current_page } || 1,
+        data_state: 'loading...',
+        tokenInfo: {},
+        contracts_address: '#{contracts_address}',
+        balance: null,
+        balance_gdtu: null,
+        balance_usd: null,
+        storage: null,
+        code: null,
+        transactionCount: null,
+        size : 10,
+        last_page: 1,
+        txs: []
+      },
+      computed: {
+        isContract: function() {
+          return (this.code && this.code.length > 3);
+        }
+      },
+      created: function () {
+        init.bind(this)();
+      }
+    });
+
+
+    // init Function
+    async function init() {
+      var self = app || this;
+      var result = self.current_tab === 'tab_holds' ? await getHoldList(self) : await getTransactions(self)
+      self.txs = result.list;
+      if(result.list.length<1) self.data_state = '无相关记录'
+      self.last_page = Math.ceil(result.total / result.page_size);
+      let infoRes = await getTokenInfo(self);
+      self.tokenInfo = Object.assign({}, infoRes);
+    }
+
+    function getTokenInfo(self) {
+      return new Promise((res, rej) => {
+        $.ajax({
+          url: "#{env.GDTU_RPC_URL}/api/v1/token/info",
+          type: "POST",
+          data: {
+            "contracts_address": self.contracts_address
+          },
+          success: function (data) {
+            let result = data.data;
+            res(result);
+          },
+          fail: function (err) {
+            console.log(err);
+            rej(err);
+          }
+        });
+      });
+    }
+
+    async function getHoldList(self){
+      return new Promise((res, rej) => {
+        $.ajax({
+          url: "#{env.GDTU_RPC_URL}/api/v1/token/holdList",
+          type: "POST",
+          data: {
+            "page_no": self.current_page,
+            "page_size": self.size,
+            "contracts_address": self.contracts_address
+          },
+          success: function (data) {
+            let result = data.data;
+            res(result);
+          },
+          fail: function (err) {
+            console.log(err);
+            rej(err);
+          }
+        });
+      });
+    }
+
+    function setPercent(balance){
+      let self = app || this;
+      let val = (balance*100/self.tokenInfo.totalSupply);
+      return val.toFixed(4);
+    }
+
+    function getRank(i) {
+      var self = app || this;
+      return ((self.current_page - 1) * self.size) + i + 1
+    }
+
+    async function getTransactions(self) {
+      return new Promise((res, rej) => {
+        $.ajax({
+          url: "#{env.GDTU_RPC_URL}/api/v1/transactions/list",
+          type: "POST",
+          data: {
+            "page_no": self.current_page,
+            "page_size": self.size,
+            "contracts_address": self.contracts_address
+          },
+          success: function (data) {
+            let result = data.data;
+            res(result);
+          },
+          fail: function (err) {
+            console.log(err);
+            rej(err);
+          }
+        });
+      });
+    }
+
+    function getPage(n) {
+      let self = app || this;
+      return self.current_page < (self.last_page - 10 - n) ? (self.current_page + 10 + 2 - n) : (self.last_page - n);
+    }
